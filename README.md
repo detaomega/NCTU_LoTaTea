@@ -1,3 +1,4 @@
 # NCUT_LoTaTea
 
-- [ ] LCT block Tree Tree 
+- [ ] LCT block Cut Tree
+- [ ] math
