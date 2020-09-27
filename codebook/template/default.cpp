@@ -17,8 +17,8 @@ const int INF = 1e18;
 const int maxn = 1e5 + 7;
 
 
-main() {
-    int i,j;
+int32_t main() {
+    int i, j;
 
     
     return 0;
