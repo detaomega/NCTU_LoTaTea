@@ -34,46 +34,47 @@ int32_t main() {
   }
   double ans = 0;
   for (int i = 1; i <= n; i++) {
-    for (int j = 1; j <= n; j++) {
-      if (i == j) continue;
-      dist[i][j] = sqrt((arr[i].F - arr[j].F) * (arr[i].F - arr[j].F) +  (arr[i].S - arr[j].S) * (arr[i].S - arr[j].S));
+    for (int j = i + 1; j <= n; j++) {
+      dist[i][j] = dis(arr[i], arr[j]) / 2.0;
       st.insert({i, j, dist[i][j]});
     }
   }
   for (int i = 1; i < n; i++) {
-    auto now = *st.begin();
-    cout << now.dist << " " << now.i << " " << now.j << "\n";
+    Node now = *st.begin();
+    // cout << now.dist << " " << now.i << " " << now.j << "\n";
     if (!Mark[now.i]) {
       Mark[now.i] = 1;
-      ans = ans + now.dist * now.dist / 4.0 * pi;
-      for (int j = 1; j <= n; j++) {
-        if (!Mark[j] && j != now.j) {
-          auto it = st.find(Node{now.i, j, dist[now.i][j]});
-          st.erase(it);
-        }
-      }
-      for (int j = 1; j <= n; j++) {
-        if (!Mark[j]) {
-          st.insert({now.i, j, dis(arr[now.i], arr[j]) - now.dist});
-        }
-      }
+      ans = ans + now.dist * now.dist * pi;
     }
     if (!Mark[now.j]) {
-      Mark[now.j] = 1;
-      ans = ans + now.dist * now.dist / 4.0 * pi;
-      for (int j = 1; j <= n; j++) {
-        if (!Mark[j] && j != now.i) {
-          auto it = st.find(Node{now.j, j, dist[now.j][j]});
-          st.erase(it);
+        Mark[now.j] = 1;
+        ans = ans + now.dist * now.dist * pi;
+    }
+    st.erase(st.begin());
+    for (int j = 1; j <= n; j++) {
+        if (j == now.i) continue;
+        int u = min(j, now.i), v = max(j, now.i);
+        auto it = st.find({u, v, dist[u][v]});
+        if (it != st.end()) {
+            st.erase(it);
         }
-      }
-      for (int j = 1; j <= n; j++) {
         if (!Mark[j]) {
-          st.insert({now.j, j, dis(arr[now.j], arr[j]) - now.dist});
+            st.insert({u, v, dis(arr[u], arr[v]) - now.dist});
+            dist[u][v] = dis(arr[u], arr[v]) - now.dist;
         }
-      }
+    }
+    for (int j = 1; j <= n; j++) {
+        if (j == now.j) continue;
+        int u = min(j, now.j), v = max(j, now.j);
+        auto it = st.find({u, v, dist[u][v]});
+        if (it != st.end()) {
+            st.erase(it);
+        }
+        if (!Mark[j]) {
+            st.insert({u, v, dis(arr[u], arr[v]) - now.dist});
+            dist[u][v] = dis(arr[u], arr[v]) - now.dist;
+        }
     }
   }
-
-  printf("%.10lf",  ans);
+  printf("%.10f",  ans);
 }
