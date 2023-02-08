@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-
 vector<int> build_z(const string &s) {
     int n = s.size();
     vector<int> z(n, 0);
